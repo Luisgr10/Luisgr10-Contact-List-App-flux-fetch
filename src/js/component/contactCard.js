@@ -6,6 +6,7 @@ import { Home } from "../views/Home";
 
 
 const ContactCard = (props) => {
+  console.log("props:");
   console.log(props);
 
   return (
@@ -24,7 +25,7 @@ const ContactCard = (props) => {
             </div>
             <div className="d-flex justify-content-end grid gap-2 mx-4">
               <button className="rounded-circle  m-1 bg-light border-0"><i className="fa-solid fa-pen"></i></button>
-              <button className="rounded-circle  m-1 bg-light border-0" onClick={}><i className="fa-solid fa-trash"></i></button>
+              <button className="rounded-circle  m-1 bg-light border-0"><i className="fa-solid fa-trash"></i></button>
             </div>
           </div>
         </div>

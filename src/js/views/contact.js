@@ -1,96 +1,85 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import "../../styles/home.css";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-
+import Form from 'react-bootstrap/Form';
 
 export const Contact = () => {
+  const { store, actions } = useContext(Context);
 
-  const { actions, store } = useContext(Context);
-  const {contactId} = useParams();
+  // Estado para almacenar los datos del contacto
+  const [contact, setContact] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
+    address: "",
+    agenda_slug: "Luisgr10",
+  });
 
-
-    const [contact, setContact] = useState(
-    {
-      "address": "",
-      "agenda_slug": "Luisgr10",
-      "email": "",
-      "full_name": "",
-      "id": "",
-      "phone": ""
-    }
-  )
-
-  const handleChange = (e) =>
-   {
-    e.preventDefault();
+  // Función para manejar cambios en los campos de entrada
+  const handleChange = (e) => {
+    // Actualiza el estado con el nuevo valor del campo
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
 
-
-  const handleSubmit = async (e) => {
+  // Función para manejar el envío del formulario
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      if (contactId) {
-        await actions.modifiContact(contact);
-      } else {
-        await actions.addContact(contact);
-      }
-      //toast.success("Contact Created! ");
-      setContact({
-        full_name: "",
-        email: "",
-        phone: "",
-        address: "",
-        agenda_slug: "Luisgr10",
-      });
-    } catch (error) {
-      console.error("Error al guardar el contacto:", error);
-    }
+    // Llama a la acción para agregar el contacto
+    actions.addContacts(contact);
   };
 
-  
   return (
-    <div className="container mt-5">
-      <form className="row g-3 needs-validation border border-1 rounded p-2" noValidate onSubmit={handleSubmit}>
-        <div className="col-md-12 position-relative">
-          <label htmlFor="validationTooltip03" className="form-label">Full name</label>
-          <input type="text" className="form-control" id="validationTooltip03" required value={contact.full_name} onChange={handleChange}/>
-          <div className="invalid-tooltip">
-          </div>
-        </div>
-        <div className="col-md-12 position-relative">
-          <label htmlFor="validationTooltipUsername" className="form-label" >Email</label>
-          <div className="input-group has-validation">
-            <span className="input-group-text" id="validationTooltipUsernamePrepend">@</span>
-            <input type="text" className="form-control" id="validationTooltipUsername" aria-describedby="validationTooltipUsernamePrepend" required value={contact.email} onChange={handleChange}/>
-            <div className="invalid-tooltip">
-              Please choose an email.
-            </div>
-          </div>
-        </div>
-        <div className="col-md-12 position-relative">
-          <label htmlFor="validationTooltip03" className="form-label">Phone</label>
-          <input type="text" className="form-control" id="validationTooltip03" required value={contact.phone} onChange={handleChange} />
-          <div className="invalid-tooltip">
-            Please provide a number.
-          </div>
-        </div>
-        <div className="col-md-12 position-relative">
-          <label htmlFor="validationTooltip03" className="form-label">Address</label>
-          <input type="text" className="form-control" id="validationTooltip03" required value={contact.address} onChange={handleChange}/>
-          <div className="invalid-tooltip">
-            Please provide a valid city.
-          </div>
-        </div>
-        <div className="col-12">
-          <button className="btn btn-success" type="submit" onClick={actions.addContact}>Save</button>
-        </div>
-      </form>
+    <Form className="container" onSubmit={handleSubmit}>
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+        <Form.Label>Full name:</Form.Label>
+        <Form.Control 
+          type="text" 
+          name="full_name" // Asegúrate de que el atributo 'name' coincida con las claves del estado 'contact'
+          value={contact.full_name}
+          onChange={handleChange} // Usa la función 'handleChange' para actualizar el estado
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+        <Form.Label>Email address:</Form.Label>
+        <Form.Control 
+          type="email" 
+          name="email" // Asegúrate de que el atributo 'name' coincida con las claves del estado 'contact'
+          placeholder="name@example.com" 
+          value={contact.email}
+          onChange={handleChange} // Usa la función 'handleChange' para actualizar el estado
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
+        <Form.Label>Phone number:</Form.Label>
+        <Form.Control 
+          type="number" 
+          name="phone" // Asegúrate de que el atributo 'name' coincida con las claves del estado 'contact'
+          value={contact.phone}
+          onChange={handleChange} // Usa la función 'handleChange' para actualizar el estado
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+        <Form.Label>Address:</Form.Label>
+        <Form.Control 
+          type="text" 
+          name="address" // Asegúrate de que el atributo 'name' coincida con las claves del estado 'contact'
+          value={contact.address}
+          onChange={handleChange} // Usa la función 'handleChange' para actualizar el estado
+        />
+      </Form.Group>
+
+      <div className="col-12">
+        <button className="btn btn-success" type="submit">
+          Save
+        </button>
+      </div>
       <Link to="/">
         <button className="btn btn-success my-3">Back to contacts</button>
       </Link>
-    </div >
-
+    </Form>
   );
 };
