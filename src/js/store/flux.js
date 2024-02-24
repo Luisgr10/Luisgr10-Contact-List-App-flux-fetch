@@ -2,7 +2,8 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       contacts: [], // Inicializa el estado con un array vacío para los contactos
-      error: null, // Añade un estado para manejar errores
+      error: null, // estado para manejar errores
+      contacto: {},
     },
     actions: {
       loadContacts: () => {
@@ -22,12 +23,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             setStore({ error: err.message }); // Maneja errores de la solicitud y actualiza el estado con el mensaje de error
           });
       },
-      addContacts: (newContact) => {
+
+      addContacts: (newContact, navigate) => {
         // Acción para añadir un nuevo contacto a la API
         const options = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'User-Agent': 'insomnia/8.6.1' },
-          body: JSON.stringify(newContact) // Asegúrate de pasar los datos del nuevo contacto como un objeto JSON
+          body: JSON.stringify(newContact)
         };
 
         fetch('https://playground.4geeks.com/apis/fake/contact/', options)
@@ -38,15 +40,49 @@ const getState = ({ getStore, getActions, setStore }) => {
             return response.json();
           })
           .then(response => {
+            getActions().loadContacts();
+            navigate("/")
             console.log(response);
-            // Aquí podrías actualizar el estado con el nuevo contacto si es necesario
           })
           .catch(err => {
             console.error('There was a problem with the fetch operation:', err);
-            // Aquí podrías actualizar el estado con el error si es necesario
           });
       },
-      
+
+      deleteContact: (id) => {
+        const url = "https://playground.4geeks.com/apis/fake/contact/" + id;
+        const options = {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json', 'User-Agent': 'insomnia/8.6.1' },
+
+        };
+
+        fetch(url, options)
+          .then(response => response.json())
+          .then(response => {
+            getActions().loadContacts()
+          })
+          .catch(err => console.error(err));
+      },
+
+      updateContact: (contacto, navigate) => {
+        const options = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'User-Agent': 'insomnia/8.6.0' },
+          body: JSON.stringify(contacto)
+        };
+
+        fetch(`https://playground.4geeks.com/apis/fake/contact/${contacto.id}`, options)
+          .then(response => response.json())
+          .then(response => {
+            getActions().loadContacts();
+            navigate("/")
+          })
+          .catch(err => console.error(err));
+      },
+      seeContact: (contacto) => {
+        setStore({ contacto: contacto })
+      }
     },
   };
 };

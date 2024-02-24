@@ -4,19 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import Form from 'react-bootstrap/Form';
 
-export const Contact = () => {
+export const EditContact = () => {
   const { store, actions } = useContext(Context);
-  const [validated, setValidated] = useState();  //Validar el formulario para que esten los datos completos.
+  const [validated, setValidated] = useState();
   const navigate = useNavigate();
 
   // Estado para almacenar los datos del contacto
-  const [contact, setContact] = useState({
-    full_name: "",
-    email: "",
-    phone: "",
-    address: "",
-    agenda_slug: "Luisgr10",
-  });
+  const [contact, setContact] = useState(
+    store.contacto
+  );
 
   // Función para manejar cambios en los campos de entrada
   const handleChange = (e) => {
@@ -24,19 +20,19 @@ export const Contact = () => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
 
- // Función para manejar el envío del formulario
- const handleSubmit = (e) => {
-  e.preventDefault();
-  // Verifica si el formulario es válido
-  const form = e.currentTarget;
-  if (form.checkValidity() === false) {
-    // Si no es válido, cambia el estado de validated a true para mostrar los errores
-    setValidated(true);
-  } else {
-    // Si es válido, llama a la acción para agregar el contacto
-    actions.addContacts(contact, navigate);
-  }
-};
+  // Función para manejar el envío del formulario
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Verifica si el formulario es válido
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      // Si no es válido, cambia el estado de validated a true para mostrar los errores
+      setValidated(true);
+    } else {
+      // Si es válido, llama a la acción para agregar el contacto
+      actions.updateContact(contact, navigate);
+    }
+  };
 
   return (
     <Form className="container" validated={validated} onSubmit={handleSubmit}>
