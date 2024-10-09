@@ -8,7 +8,8 @@ export const Navbar = () => {
 				<Link to="/contact">
 					<button className="btn btn-success">Add new contact</button>
 				</Link>
-			</div>
+			</div>. 
 		</nav>
 	);
 };
+

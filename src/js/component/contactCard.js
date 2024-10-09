@@ -5,8 +5,7 @@ import { useNavigate } from "react-router";
 import { Modal, Button } from "react-bootstrap"; // Importa el componente Modal y Button de react-bootstrap
 
 const ContactCard = (props) => {
-  console.log("props:");
-  console.log(props);
+ 
   const { store, actions } = useContext(Context)
   const navigate = useNavigate()
 
@@ -26,6 +25,7 @@ const ContactCard = (props) => {
     actions.deleteContact(contactId);
     setShowModal(false);
   };
+  
 
   return (
     <div className="container d-flex justify-content-center m-4">
@@ -36,7 +36,7 @@ const ContactCard = (props) => {
           </div>
           <div className="col-md-8">
             <div className="card-body pt-5">
-              <h5 className="card-title"> {props.contacto.full_name} </h5>
+              <h5 className="card-title"> {props.contacto.name} </h5>
               <p className="card-text"><i className="fa-solid fa-location-dot"> {props.contacto.address}</i></p>
               <p className="card-text"><small className="text-body-secondary"><i className="fa-solid fa-phone"> {props.contacto.phone}</i></small></p>
               <p className="card-text"><small className="text-body-secondary"><i className="fa-solid fa-envelope"> {props.contacto.email}</i></small></p>

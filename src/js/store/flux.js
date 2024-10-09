@@ -1,22 +1,23 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
-      contacts: [], // Inicializa el estado con un array vacío para los contactos
+      contacts: [], 
       error: null, // estado para manejar errores
       contacto: {},
     },
     actions: {
       loadContacts: () => {
-        // Acción para cargar los contactos desde la API
-        fetch("https://playground.4geeks.com/apis/fake/contact/agenda/Luisgr10")
+        const options = {method: 'GET', headers: {'User-Agent': 'insomnia/9.2.0'}};
+        fetch('https://playground.4geeks.com/contact/agendas/Luisgr10', options)
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
             return response.json();
           })
-          .then(response => {
-            setStore({ contacts: response }); // Actualiza el estado con los contactos obtenidos
+          .then(data => {
+            console.log("Respuesta de la API:", data)
+            setStore({ contacts: data.contacts });
           })
           .catch(err => {
             console.error('There was a problem with the fetch operation:', err);
@@ -32,7 +33,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           body: JSON.stringify(newContact)
         };
 
-        fetch('https://playground.4geeks.com/apis/fake/contact/', options)
+        fetch('https://playground.4geeks.com/contact/agendas/Luisgr10/contacts', options)
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
@@ -50,14 +51,13 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       deleteContact: (id) => {
-        const url = "https://playground.4geeks.com/apis/fake/contact/" + id;
         const options = {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json', 'User-Agent': 'insomnia/8.6.1' },
 
         };
+        fetch(`https://playground.4geeks.com/contact/agendas/Luisgr10/contacts/${id}`, options)
 
-        fetch(url, options)
           .then(response => response.json())
           .then(response => {
             getActions().loadContacts()
@@ -72,7 +72,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           body: JSON.stringify(contacto)
         };
 
-        fetch(`https://playground.4geeks.com/apis/fake/contact/${contacto.id}`, options)
+        fetch(`https://playground.4geeks.com/contact/agendas/Luisgr10/contacts/${contacto.id}`, options)
           .then(response => response.json())
           .then(response => {
             getActions().loadContacts();

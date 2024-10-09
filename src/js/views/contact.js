@@ -11,7 +11,7 @@ export const Contact = () => {
 
   // Estado para almacenar los datos del contacto
   const [contact, setContact] = useState({
-    full_name: "",
+    name: "",
     email: "",
     phone: "",
     address: "",
@@ -45,8 +45,8 @@ export const Contact = () => {
         <Form.Control
           required
           type="text"
-          name="full_name"
-          value={contact.full_name}
+          name="name"
+          value={contact.name}
           onChange={handleChange} // Usa la función 'handleChange' para actualizar el estado
         />
       </Form.Group>
